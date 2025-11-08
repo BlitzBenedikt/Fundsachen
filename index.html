@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="description" content="Finde deine verlorenen Gegenstände vom CodeCamp 2025">
+    <meta name="keywords" content="Fundsachen, CodeCamp, Verloren, Gefunden">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🔍</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%236366f1' width='180' height='180' rx='40'/><text x='90' y='135' text-anchor='middle' font-size='100'>🔍</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Fundsachen - CodeCamp 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #ec4899;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --accent: #fbbf24;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f3a 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Header & Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -50px;
+            left: -50px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        /* Contact Button */
+        .contact-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            z-index: 99;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4);
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .contact-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
+        }
+
+        /* Items Section */
+        .items-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: var(--text-primary);
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        /* Search & Filter Section */
+        .search-filter-section {
+            background: rgba(99, 102, 241, 0.05);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 40px;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .search-bar-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: 50px;
+            background: rgba(99, 102, 241, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .search-bar::placeholder {
+            color: rgba(241, 245, 249, 0.5);
+        }
+
+        .search-clear-btn {
+            padding: 12px 20px;
+            background: rgba(236, 72, 153, 0.2);
+            color: var(--secondary-color);
+            border: 2px solid rgba(236, 72, 153, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            min-width: 50px;
+        }
+
+        .search-clear-btn:hover {
+            background: rgba(236, 72, 153, 0.3);
+            border-color: var(--secondary-color);
+        }
+
+        .filter-section {
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 10px 18px;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            background: rgba(99, 102, 241, 0.05);
+            color: var(--text-primary);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            border-color: rgba(99, 102, 241, 0.6);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .results-info {
+            margin-top: 15px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding-top: 15px;
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 50px;
+        }
+
+        .item-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            animation: slideInUp 0.6s ease-out backwards;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .item-card:nth-child(1) { animation-delay: 0.1s; }
+        .item-card:nth-child(2) { animation-delay: 0.2s; }
+        .item-card:nth-child(3) { animation-delay: 0.3s; }
+        .item-card:nth-child(n+4) { animation-delay: 0.4s; }
+
+        .item-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+
+        .item-carousel {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            background: #000;
+            aspect-ratio: 1;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease;
+            opacity: 1;
+        }
+
+        .carousel-image.hidden {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .dot.active {
+            background: var(--accent);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(99, 102, 241, 0.8);
+        }
+
+        .carousel-nav.prev {
+            left: 10px;
+        }
+
+        .carousel-nav.next {
+            right: 10px;
+        }
+
+        .item-content {
+            padding: 25px;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .item-id {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .item-type-badge {
+            display: inline-block;
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--accent);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .item-subtype-badge {
+            display: inline-block;
+            background: rgba(236, 72, 153, 0.2);
+            color: var(--secondary-color);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .item-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .item-contact-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .item-contact-btn:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            animation: slideInScale 0.4s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+        }
+
+        .close {
+            color: var(--text-secondary);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Contact Info Tab */
+        .contact-info-section {
+            margin-bottom: 30px;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-info-item:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateX(5px);
+        }
+
+        .contact-icon {
+            font-size: 24px;
+            color: var(--primary-color);
+            min-width: 30px;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .contact-value {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: 10px;
+            background: rgba(99, 102, 241, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(99, 102, 241, 0.05);
+            border-radius: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .required-note {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Divider */
+        .modal-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+            margin: 30px 0;
+        }
+
+        /* Tabs */
+        .modal-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .modal-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .modal-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .modal-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: slideInUp 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                padding: 20px;
+            }
+
+            .item-title {
+                font-size: 1.4rem;
+            }
+
+            .carousel-nav {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+
+            .contact-fab {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .search-filter-section {
+                padding: 15px;
+            }
+
+            .search-bar {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+
+            .filter-buttons {
+                gap: 8px;
+            }
+
+            .filter-btn {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
+
+            .item-meta {
+                gap: 6px;
+            }
+
+            .item-id, .item-type-badge, .item-subtype-badge {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                min-height: 60vh;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+                margin-bottom: 25px;
+            }
+
+            .btn {
+                padding: 10px 30px;
+                font-size: 0.9rem;
+            }
+
+            .items-container {
+                padding: 20px 15px;
+            }
+
+            .items-grid {
+                gap: 20px;
+            }
+
+            .item-content {
+                padding: 15px;
+            }
+
+            .item-title {
+                font-size: 1.1rem;
+                margin-bottom: 10px;
+            }
+
+            .modal-content {
+                padding: 15px;
+            }
+
+            .modal-header h2 {
+                font-size: 1.3rem;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            .search-bar-wrapper {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .search-clear-btn {
+                width: 100%;
+            }
+
+            .filter-buttons {
+                gap: 6px;
+            }
+
+            .filter-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                flex: 0 1 calc(33% - 5px);
+            }
+
+            .search-filter-section {
+                margin-bottom: 20px;
+            }
+
+            .results-info {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Success Message */
+        .success-message {
+            background: rgba(34, 197, 94, 0.2);
+            border: 2px solid #22c55e;
+            color: #86efac;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: none;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+            color: #fca5a5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: none;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>🔍 Fundsachen</h1>
+            <p>Du hast etwas auf dem CodeCamp2025 verloren ? Hier ist die Platform für dinge die Gefunden wurden und nun ein Zuhause suchen.</p>
+            <button class="btn btn-primary" onclick="openContactModal()">Mein Gegenstand ist hier!</button>
+        </div>
+    </section>
+
+    <!-- Items Section -->
+    <section class="items-container">
+        <h2 class="section-title">Gefundene Gegenstände</h2>
+        
+        <!-- Search & Filter Section -->
+        <div class="search-filter-section">
+            <!-- Search Bar -->
+            <div class="search-bar-wrapper">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="🔍 Suche nach Gegenständen..." 
+                    class="search-bar"
+                    onkeyup="filterAndSearch()"
+                >
+                <button class="search-clear-btn" onclick="clearSearch()" title="Suche löschen">✕</button>
+            </div>
+            
+            <!-- Filter Buttons -->
+            <div class="filter-section">
+                <div class="filter-label">Filter nach Kategorie:</div>
+                <div class="filter-buttons" id="typeFilterButtons">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+            </div>
+            
+            <!-- Subtype Filters (dynamisch) -->
+            <div class="filter-section" id="subtypeFilterSection" style="display: none;">
+                <div class="filter-label">Filter nach Typ:</div>
+                <div class="filter-buttons" id="subtypeFilterButtons">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+            </div>
+            
+            <!-- Results Info -->
+            <div class="results-info" id="resultsInfo">
+                Zeige <span id="visibleCount">0</span> von <span id="totalCount">0</span> Artikeln
+            </div>
+        </div>
+        
+        <!-- Items Grid -->
+        <div class="items-grid" id="itemsGrid">
+            <!-- Items werden hier dynamisch eingefügt -->
+        </div>
+    </section>
+
+    <!-- Contact FAB -->
+    <button class="contact-fab" onclick="openContactModal()" title="Kontakt">📧</button>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Kontakt</h2>
+                <span class="close" onclick="closeContactModal()">&times;</span>
+            </div>
+
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchTab('info')">Meine Kontaktdaten</button>
+                <button class="modal-tab" onclick="switchTab('form')">Kontaktformular</button>
+            </div>
+
+            <!-- Contact Info Tab -->
+            <div id="info" class="tab-content active">
+                <div class="contact-info-section">
+                    <div class="contact-info-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-details">
+                            <div class="contact-label">Telefon</div>
+                            <div class="contact-value" onclick="copyToClipboard(this.textContent)">
+                                +49 176 63622767
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-details">
+                            <div class="contact-label">Email</div>
+                            <div class="contact-value" onclick="copyToClipboard(this.textContent)">
+                                benedikt-jansen@mein.gmx
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form Tab -->
+            <div id="form" class="tab-content">
+                <div class="success-message" id="successMessage">
+                    ✓ Deine Nachricht wurde erfolgreich versendet! Ich melde mich bald bei dir.
+                </div>
+                <div class="error-message" id="errorMessage">
+                    ✗ Ein Fehler ist aufgetreten. Bitte versuche es später erneut.
+                </div>
+
+                <form id="contactForm" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label for="articleId">Artikelnummer</label>
+                        <input type="text" id="articleId" placeholder="z.B. ITEM-001">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Wie möchtest du kontaktiert werden?</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="contactPhone" name="contactMethod" onchange="updateFormFields()">
+                            <label for="contactPhone">Per Telefon</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="contactEmail" name="contactMethod" onchange="updateFormFields()">
+                            <label for="contactEmail">Per Email</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="nextCodeClub" name="contactMethod" onchange="updateFormFields()">
+                            <label for="nextCodeClub">Nächste CodeClub Stunde</label>
+                        </div>
+                        <div class="required-note">* Mindestens eine Option muss ausgewählt sein</div>
+                    </div>
+
+                    <!-- Email Feld - nur wenn Email ausgewählt -->
+                    <div class="form-group" id="emailFieldGroup" style="display: none;">
+                        <label for="email">Deine Email-Adresse</label>
+                        <input type="email" id="email" placeholder="deine.email@example.com">
+                    </div>
+
+                    <!-- Telefon Feld - nur wenn Telefon ausgewählt -->
+                    <div class="form-group" id="phoneFieldGroup" style="display: none;">
+                        <label for="phone">Deine Telefonnummer</label>
+                        <input type="tel" id="phone" placeholder="+49 XXX XXXXXXXX">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Nachricht</label>
+                        <textarea id="message" placeholder="Schreib hier deine Nachricht..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">Absenden</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Worker Registration -->
+    <script>
+        // Register Service Worker für PWA-Funktionalität
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((reg) => {
+                        console.log('Service Worker registered:', reg);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Script -->
+    <script>
+        // Configuration
+        const CONFIG = {
+            // WICHTIG: Ersetze diese mit deinen echten Kontaktdaten
+            phone: '+49 176 63622767',
+            email: 'benedikt-jansen@mein.gmx',
+            formSubmitUrl: 'https://formspree.io/f/xblqryvd',
+        };
+
+        // Items Data (wird dynamisch aus Bildern geladen)
+        let items = [];
+        let currentItemIndex = 0;
+        let currentImageIndex = {};
+        let allTypes = [];
+        let allSubtypes = [];
+        let selectedTypes = new Set(); // MULTI-SELECT: Array statt einzelner Wert
+        let selectedSubtypes = new Set(); // MULTI-SELECT: Array statt einzelner Wert
+        let searchQuery = '';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+        });
+
+        function initializeApp() {
+            // Lade Bilder von der images Folder
+            loadItems();
+            buildFilterButtons();
+            renderItems();
+            updateResultsInfo();
+        }
+
+        function buildFilterButtons() {
+            /**
+             * Erstelle Filter-Buttons basierend auf den geladenen Items
+             * MULTI-SELECT: mehrere Filter können gleichzeitig ausgewählt werden
+             */
+            
+            // Sammle alle Typen
+            allTypes = [...new Set(items.map(item => item.type))].sort();
+            
+            // Generiere Typ-Filter Buttons
+            const typeFilterButtons = document.getElementById('typeFilterButtons');
+            typeFilterButtons.innerHTML = '';
+            
+            // "Alle anzeigen" Button
+            const allBtn = document.createElement('button');
+            allBtn.className = 'filter-btn active';
+            allBtn.textContent = '✓ Alle Kategorien';
+            allBtn.onclick = () => clearTypeFilter();
+            typeFilterButtons.appendChild(allBtn);
+            
+            // Typ-Buttons
+            allTypes.forEach(type => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.textContent = type;
+                btn.onclick = () => toggleTypeFilter(type);
+                btn.dataset.type = type;
+                typeFilterButtons.appendChild(btn);
+            });
+        }
+
+        function clearTypeFilter() {
+            selectedTypes.clear();
+            selectedSubtypes.clear();
+            updateFilterButtons();
+            buildSubtypeFilterButtons();
+            filterAndSearch();
+        }
+
+        function toggleTypeFilter(type) {
+            // Toggle: hinzufügen oder entfernen
+            if (selectedTypes.has(type)) {
+                selectedTypes.delete(type);
+            } else {
+                selectedTypes.add(type);
+            }
+            selectedSubtypes.clear(); // Subtypes zurücksetzen bei Typ-Änderung
+            updateFilterButtons();
+            buildSubtypeFilterButtons();
+            filterAndSearch();
+        }
+
+        function buildSubtypeFilterButtons() {
+            /**
+             * Erstelle Subtype-Filter Buttons basierend auf ausgewähltem Typ(en)
+             * SPECIAL: Für "Socke" typ zeige alle drei optionen: Alle, Einzeln, Paar
+             */
+            const subtypeSection = document.getElementById('subtypeFilterSection');
+            const subtypeButtons = document.getElementById('subtypeFilterButtons');
+            
+            if (selectedTypes.size === 0) {
+                subtypeSection.style.display = 'none';
+                return;
+            }
+            
+            // Sammle Subtypes für die ausgewählten Typen
+            let subtypes = new Set();
+            
+            // SPECIAL HANDLING für Socke: Zeige alle drei Varianten
+            if (selectedTypes.has('Socke')) {
+                subtypes.add('Alle');      // Zeige alle Socken-Items
+                subtypes.add('Einzeln');   // Nur Einzelne
+                subtypes.add('Paar');      // Nur Paare
+            } else {
+                // Für andere Typen: nur die existierenden Subtypes
+                items
+                    .filter(item => selectedTypes.has(item.type))
+                    .forEach(item => {
+                        if (item.subtype && item.subtype !== 'Allgemein') {
+                            subtypes.add(item.subtype);
+                        }
+                    });
+            }
+            
+            subtypes = Array.from(subtypes).sort();
+            
+            if (subtypes.length === 0) {
+                subtypeSection.style.display = 'none';
+                return;
+            }
+            
+            subtypeSection.style.display = 'block';
+            subtypeButtons.innerHTML = '';
+            
+            // "Alle" Button für diesen Typ - nur für nicht-Socke Typen
+            if (!selectedTypes.has('Socke')) {
+                const allBtn = document.createElement('button');
+                allBtn.className = 'filter-btn active';
+                allBtn.textContent = '✓ Alle';
+                allBtn.onclick = () => clearSubtypeFilter();
+                subtypeButtons.appendChild(allBtn);
+            }
+            
+            // Subtype-Buttons - mit besseren Labels
+            subtypes.forEach(subtype => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                
+                // Schöne Labels für Socken
+                let label = subtype;
+                let filterValue = subtype; // Der Wert für den Filter
+                
+                if (selectedTypes.has('Socke')) {
+                    if (subtype === 'Alle') {
+                        label = '✓ Alle Socken';
+                        filterValue = 'SOCKE_ALL';
+                    } else if (subtype === 'Einzeln') {
+                        label = '🧦 Socke-Einzeln';
+                        filterValue = 'Einzeln';
+                    } else if (subtype === 'Paar') {
+                        label = '🧦🧦 Socken-Paar';
+                        filterValue = 'Paar';
+                    }
+                }
+                
+                btn.textContent = label;
+                btn.onclick = () => toggleSubtypeFilter(filterValue);
+                btn.dataset.subtype = filterValue;
+                subtypeButtons.appendChild(btn);
+            });
+        }
+
+        function clearSubtypeFilter() {
+            selectedSubtypes.clear();
+            updateFilterButtons();
+            filterAndSearch();
+        }
+
+        function toggleSubtypeFilter(subtype) {
+            // Toggle: hinzufügen oder entfernen
+            if (selectedSubtypes.has(subtype)) {
+                selectedSubtypes.delete(subtype);
+            } else {
+                selectedSubtypes.add(subtype);
+            }
+            updateFilterButtons();
+            filterAndSearch();
+        }
+
+        function updateFilterButtons() {
+            /**
+             * Update Styling von Filter Buttons
+             * MULTI-SELECT: mehrere können aktiv sein
+             */
+            
+            // Update Type Buttons
+            document.querySelectorAll('#typeFilterButtons .filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (selectedTypes.size === 0 && btn.textContent.includes('Alle')) {
+                    btn.classList.add('active');
+                } else if (btn.dataset.type && selectedTypes.has(btn.dataset.type)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Update Subtype Buttons
+            document.querySelectorAll('#subtypeFilterButtons .filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (selectedSubtypes.size === 0 && btn.textContent.includes('Alle')) {
+                    btn.classList.add('active');
+                } else if (btn.dataset.subtype && selectedSubtypes.has(btn.dataset.subtype)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function filterAndSearch() {
+            /**
+             * Kombiniert Suche und Filter
+             */
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderItems();
+            updateResultsInfo();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            filterAndSearch();
+        }
+
+        function updateResultsInfo() {
+            /**
+             * Update die Anzahl der sichtbaren Artikel
+             */
+            const visibleCount = document.querySelectorAll('.item-card:not([style*="display: none"])').length;
+            document.getElementById('visibleCount').textContent = visibleCount;
+            document.getElementById('totalCount').textContent = items.length;
+        }
+
+        function parseFilename(filename) {
+            /**
+             * Parse Dateinamen nach Format: "Titel_Typ-Subtyp.jpg"
+             * Beispiele:
+             * - "Schwarzer Hoddi mit zipper_Hoddi-2.jpg" → title, type=Hoddi, subtype=2
+             * - "Weiß Socke_Socke-Einzeln.jpg" → title, type=Socke, subtype=Einzeln
+             * - "Graues_T-shirt.jpg" → title, type=T-shirt, subtype=Allgemein (T-shirt ist vollständig!)
+             */
+            const nameWithoutExt = filename.replace(/\.[^/.]+$/, '');
+            const parts = nameWithoutExt.split('_');
+            
+            if (parts.length < 2) {
+                // Fallback wenn kein _ vorhanden
+                return {
+                    title: filename.replace(/\.[^/.]+$/, ''),
+                    type: 'Sonstige',
+                    subtype: 'Allgemein',
+                };
+            }
+            
+            const title = parts[0].trim();
+            const typeInfo = parts[parts.length - 1].trim(); // Letzter Teil nach _
+            
+            // Parse Typ-Subtyp aus "Hoddi-2" oder "Socke-Einzeln" oder "T-shirt"
+            let type = 'Sonstige';
+            let subtype = 'Allgemein';
+            
+            // SPECIAL: T-shirt und ähnliche sollten NICHT bei - gesplittet werden
+            if (typeInfo.toLowerCase() === 't-shirt') {
+                type = 'T-shirt';
+                subtype = 'Allgemein';
+            } else if (typeInfo.includes('-')) {
+                // Nur splitten wenn es ein echter Subtyp-Separator ist (nicht T-shirt)
+                const typeParts = typeInfo.split('-');
+                type = typeParts[0].trim();
+                subtype = typeParts.slice(1).join('-').trim(); // Kann mehrere Teile haben
+                
+                // Validierung: subtype sollte nicht nur aus Zahlen bestehen oder "shirt" sein
+                if (subtype === 'shirt') {
+                    type = typeInfo; // Das ganze ist der Typ
+                    subtype = 'Allgemein';
+                }
+            } else {
+                type = typeInfo;
+            }
+            
+            return { title, type, subtype };
+        }
+
+        function loadItemsFromImages() {
+            /**
+             * Lade Items automatisch aus allen Bildern im images/ Ordner
+             * Gruppiere nach Titel und sammle alle Bilder pro Artikel
+             */
+            
+            // Dies würde idealerweise vom Server kommen
+            // Für Demo verwenden wir die bekannten Dateien
+            const imageFiles = [
+                "Adidas Socke ohen Partner sucht Deutschen für Malorca Urlaub_Socke-Einzeln.jpg",
+                "Adidas Socken für den waren Maloca Urlauber_Socke-Paar.jpg",
+                "Axe für Leute die nach Alaska möchten_Shampo.jpg",
+                "Balea Duschgel für leute mit Wengi Zeit 3in1_Shampo.jpg",
+                "Central Perk Socke für leute die Cafe trinken wollen_Socke-Einzeln.jpg",
+                "Dusch das für leute die sich von einer Shampo flasche zum Duschen zwingen_Shampo.jpg",
+                "Einsames Stück Stoff sucht zuhause_Handtuch.jpg",
+                "Graues_T-shirt.jpg",
+                "Großes Weißes Stofflacken für Beamer und so_Bettlacken.jpg",
+                "Grüner Knopf Unterhose sucht passenden Träger mit Umwelt bewusstsein_Unterhose.jpg",
+                "Hose sucht Beine_Hose.jpg",
+                "Hose sucht Beine_Hose-2.jpg",
+                "Lotto Socke für leute die Lotto spielen wollen. Wer weiß vieleicht schaft man mit der Socke denn Großen gewinn_Socke-Einzeln.jpg",
+                "Luxus unterhose von Zarra_Unterhose.jpg",
+                "Nivea Pflegedusche für leute die gepfelgt sein wollen_shampo.jpg",
+                "Pushin_T-shirt.jpg",
+                "Reebok_Socke-Einzeln.jpg",
+                "Schlichte Socke für Große Füße_Socke-Einzeln.jpg",
+                "Schraubendreher für leute die unterwegs mal ein Pc reparieren wollen_Schraubendreher.jpg",
+                "Schwarze Lange Socken suchen lange Beine_Socke-Paar.jpg",
+                "Schwarze Socken suchen passende Füße_Socke-Paar.jpg",
+                "Schwarzer Hoddi für Leute die Warm undercover gehen möchten_Hoddi.jpg",
+                "Schwarzer Hoddi für Leute die Warm undercover gehen möchten_Hoddi-2.jpg",
+                "Schwarzer Hoddi mit zipper für leute die schnell undercover gehen möchten wenn ihnen Kalt wird_Hoddi.jpg",
+                "Schwarzer Hoddi mit zipper für leute die schnell undercover gehen möchten wenn ihnen Kalt wird_Hoddi-2.jpg",
+                "So ein Schnell Trochnendes Handtuch_Handtuch.jpg",
+                "Socke für Serien Fans_Socke-Einzeln.jpg",
+                "Socke mit freshen muster_Socke-Einzeln.jpg",
+                "Socke mit Lininen für leute die ein geraden weg gehen im Leben_Socke-Einzeln.jpg",
+                "Socke mit zwei Kreuzen für leute die angst vor Vampieren haben_Socke-Einzeln.jpg",
+                "Socke mit Zwei Schwarzen Streifen sucht Partner_Socke-Einzeln.jpg",
+                "Socken mit Katzen logo_Socke-Paar.jpg",
+                "Socken mit zwei Streifen_Socke-Paar.jpg",
+                "Sportliche Unterhose für sportliche leute von Sportwear_Unterhose.jpg",
+                "Unterhose mit Miami Fever_Unterhose.jpg",
+                "Weiß mit Blau Grün Rand_Lapen.jpg",
+                "Weiß mit Lila Rand_Lapen.jpg",
+                "Weiß Socke_Socke-Einzeln.jpg",
+                "Yigga unter hose sucht träger für ausflüge in denn Himmel_Unterhose.jpg",
+            ];
+            
+            // Gruppiere nach Titel
+            const itemMap = {};
+            
+            imageFiles.forEach((filename, index) => {
+                const parsed = parseFilename(filename);
+                const key = parsed.title;
+                
+                if (!itemMap[key]) {
+                    itemMap[key] = {
+                        id: `ITEM-${String(Object.keys(itemMap).length + 1).padStart(3, '0')}`,
+                        title: parsed.title,
+                        type: parsed.type,
+                        subtype: parsed.subtype,
+                        images: [],
+                    };
+                }
+                
+                itemMap[key].images.push(`images/${filename}`);
+            });
+            
+            // Konvertiere Map zu Array
+            items = Object.values(itemMap);
+        }
+
+        function loadItems() {
+            // Lade Items automatisch aus den Bildern
+            loadItemsFromImages();
+        }
+
+        function renderItems() {
+            const grid = document.getElementById('itemsGrid');
+            grid.innerHTML = '';
+
+            let visibleCount = 0;
+
+            items.forEach((item, index) => {
+                // Filtere nach Typ (MULTI-SELECT: item muss in selectedTypes sein oder selectedTypes ist leer)
+                if (selectedTypes.size > 0 && !selectedTypes.has(item.type)) {
+                    return;
+                }
+                
+                // Filtere nach Subtype (MULTI-SELECT)
+                if (selectedSubtypes.size > 0) {
+                    let matches = false;
+                    
+                    // Iteriere durch alle ausgewählten Subtypes
+                    for (let selectedSub of selectedSubtypes) {
+                        // Spezial: SOCKE_ALL zeigt alle Socken (ignoriere subtype)
+                        if (selectedSub === 'SOCKE_ALL' && item.type === 'Socke') {
+                            matches = true;
+                            break;
+                        }
+                        // Wenn "Einzeln" ausgewählt (für Socke), zeige Items mit subtype Einzeln
+                        else if (selectedSub === 'Einzeln' && item.subtype === 'Einzeln') {
+                            matches = true;
+                            break;
+                        }
+                        // Wenn "Paar" ausgewählt (für Socke), zeige Items mit subtype Paar
+                        else if (selectedSub === 'Paar' && item.subtype === 'Paar') {
+                            matches = true;
+                            break;
+                        }
+                        // Für andere Subtypes, normales Matching
+                        else if (selectedSub === item.subtype) {
+                            matches = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!matches) {
+                        return;
+                    }
+                }
+                
+                // Filtere nach Suchtext (durchsuche Title, Typ, Subtype, ID)
+                const searchLower = searchQuery.toLowerCase();
+                const matchesSearch = 
+                    item.title.toLowerCase().includes(searchLower) ||
+                    item.type.toLowerCase().includes(searchLower) ||
+                    item.subtype.toLowerCase().includes(searchLower) ||
+                    item.id.toLowerCase().includes(searchLower);
+                
+                if (searchQuery && !matchesSearch) {
+                    return;
+                }
+                
+                // Item wird angezeigt
+                const card = createItemCard(item, index);
+                grid.appendChild(card);
+                currentImageIndex[item.id] = 0;
+                visibleCount++;
+            });
+
+            // Zeige "Keine Ergebnisse" Nachricht
+            if (visibleCount === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `
+                    <h3>😕 Keine Ergebnisse gefunden</h3>
+                    <p>Versuche einen anderen Filter oder Suchbegriff</p>
+                `;
+                grid.appendChild(noResults);
+            }
+        }
+
+        function createItemCard(item, index) {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+
+            const imageHTML = item.images.map((img, i) => 
+                `<img src="${img}" class="carousel-image ${i === 0 ? '' : 'hidden'}" alt="${item.title}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-size=%2230%22%3EBild nicht gefunden%3C/text%3E%3C/svg%3E'">`
+            ).join('');
+
+            const dotsHTML = item.images.map((_, i) => 
+                `<div class="dot ${i === 0 ? 'active' : ''}" onclick="goToImage('${item.id}', ${i})"></div>`
+            ).join('');
+
+            card.innerHTML = `
+                <div class="item-carousel">
+                    ${imageHTML}
+                    ${item.images.length > 1 ? `
+                        <button class="carousel-nav prev" onclick="prevImage('${item.id}')">❮</button>
+                        <button class="carousel-nav next" onclick="nextImage('${item.id}')">❯</button>
+                        <div class="carousel-controls">
+                            ${dotsHTML}
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="item-content">
+                    <div class="item-meta">
+                        <div class="item-id">Artikel Nr: ${item.id}</div>
+                        <div class="item-type-badge">${item.type}</div>
+                        ${item.subtype !== 'Allgemein' ? `<div class="item-subtype-badge">${item.subtype}</div>` : ''}
+                    </div>
+                    <h3 class="item-title">${item.title}</h3>
+                    <button class="item-contact-btn" onclick="openContactModalWithItem('${item.id}')">
+                        Mein Gegenstand! →
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function nextImage(itemId) {
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+            currentImageIndex[itemId] = (currentImageIndex[itemId] + 1) % item.images.length;
+            updateCarousel(itemId);
+        }
+
+        function prevImage(itemId) {
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+            currentImageIndex[itemId] = (currentImageIndex[itemId] - 1 + item.images.length) % item.images.length;
+            updateCarousel(itemId);
+        }
+
+        function goToImage(itemId, index) {
+            currentImageIndex[itemId] = index;
+            updateCarousel(itemId);
+        }
+
+        function updateCarousel(itemId) {
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+
+            const carousel = document.querySelector(`[onclick*="${itemId}"]`).closest('.item-card').querySelector('.item-carousel');
+            const images = carousel.querySelectorAll('.carousel-image');
+            const dots = carousel.querySelectorAll('.dot');
+
+            images.forEach((img, i) => {
+                img.classList.toggle('hidden', i !== currentImageIndex[itemId]);
+            });
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentImageIndex[itemId]);
+            });
+        }
+
+        // Modal functions
+        function openContactModal() {
+            document.getElementById('contactModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+            updateFormFields(); // Aktualisiere Felder wenn Modal öffnet
+        }
+
+        function updateFormFields() {
+            /**
+             * Zeige/verberge Email und Telefon Felder basierend auf Auswahl
+             */
+            const contactPhone = document.getElementById('contactPhone').checked;
+            const contactEmail = document.getElementById('contactEmail').checked;
+            
+            // Zeige Email-Feld wenn Email ausgewählt
+            document.getElementById('emailFieldGroup').style.display = contactEmail ? 'block' : 'none';
+            
+            // Zeige Telefon-Feld wenn Telefon ausgewählt
+            document.getElementById('phoneFieldGroup').style.display = contactPhone ? 'block' : 'none';
+            
+            // Mache Felder required/optional basierend auf Auswahl
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            
+            emailInput.required = contactEmail;
+            phoneInput.required = contactPhone;
+        }
+
+        function openContactModalWithItem(itemId) {
+            openContactModal();
+            switchTab('form');
+            document.getElementById('articleId').value = itemId;
+            document.getElementById('articleId').focus();
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.modal-tab');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent.includes(tabName === 'info' ? 'Meine' : 'Kontaktformular')) {
+                    tab.classList.add('active');
+                }
+            });
+
+            contents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tabName) {
+                    content.classList.add('active');
+                }
+            });
+        }
+
+        // Form submission
+        async function submitForm(event) {
+            event.preventDefault();
+
+            const articleId = document.getElementById('articleId').value;
+            const contactPhone = document.getElementById('contactPhone').checked;
+            const contactEmail = document.getElementById('contactEmail').checked;
+            const nextCodeClub = document.getElementById('nextCodeClub').checked;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const message = document.getElementById('message').value;
+
+            // Validierung
+            if (!contactPhone && !contactEmail && !nextCodeClub) {
+                showErrorMessage('Bitte wähle mindestens eine Kontaktmethode aus!');
+                return;
+            }
+
+            // Validiere nur die ausgewählten Kontaktmethoden
+            if (contactEmail && !email) {
+                showErrorMessage('Bitte gib deine Email-Adresse an!');
+                return;
+            }
+
+            if (contactPhone && !phone) {
+                showErrorMessage('Bitte gib deine Telefonnummer an!');
+                return;
+            }
+
+            // Form Data
+            const formData = new FormData();
+            formData.append('articleId', articleId);
+            formData.append('contactPhone', contactPhone);
+            formData.append('contactEmail', contactEmail);
+            formData.append('nextCodeClub', nextCodeClub);
+            formData.append('email', email);
+            formData.append('phone', phone);
+            formData.append('message', message);
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird versendet...';
+
+            try {
+                // Sende an Formspree
+                const response = await fetch(CONFIG.formSubmitUrl, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    showSuccessMessage();
+                    document.getElementById('contactForm').reset();
+                } else {
+                    showErrorMessage('Fehler beim Versenden der Nachricht. Bitte versuche es später erneut.');
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                showErrorMessage('Fehler beim Versenden. Bitte versuche es später erneut.');
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Absenden';
+            }
+        }
+
+        function showSuccessMessage() {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            errorMsg.classList.remove('show');
+            successMsg.classList.add('show');
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 5000);
+        }
+
+        function showErrorMessage(message) {
+            const errorMsg = document.getElementById('errorMessage');
+            const successMsg = document.getElementById('successMessage');
+            errorMsg.textContent = '✗ ' + message;
+            successMsg.classList.remove('show');
+            errorMsg.classList.add('show');
+            setTimeout(() => {
+                errorMsg.classList.remove('show');
+            }, 5000);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text.trim());
+            alert('Kopiert: ' + text.trim());
+        }
+
+        // Event listeners
+        function setupEventListeners() {
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                const modal = document.getElementById('contactModal');
+                if (event.target === modal) {
+                    closeContactModal();
+                }
+            };
+
+            // Close modal on Escape
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeContactModal();
+                }
+            });
+        }
+
+        // Update contact info in modal
+        function updateContactInfo() {
+            const phoneEl = document.querySelector('[onclick*="copyToClipboard"]');
+            if (phoneEl) {
+                phoneEl.textContent = CONFIG.phone;
+            }
+        }
+
+        // Soft scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
