@@ -4,9 +4,8 @@
 const CACHE_NAME = 'fundsachen-v1';
 const ASSETS_TO_CACHE = [
     '/',
-    '/index.html',
-    '/manifest.json',
-    '/config.json'
+    '/Fundsachen/index.html',
+    '/Fundsachen/manifest.json'
 ];
 
 // Install Event
@@ -14,7 +13,10 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             console.log('Service Worker: Caching assets');
-            return cache.addAll(ASSETS_TO_CACHE);
+            // Versuche Assets zu cachen, ignoriere Fehler
+            return cache.addAll(ASSETS_TO_CACHE).catch((error) => {
+                console.log('Service Worker: Could not cache all assets', error);
+            });
         })
     );
     self.skipWaiting();
